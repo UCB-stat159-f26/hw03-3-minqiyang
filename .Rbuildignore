@@ -1,0 +1,6 @@
+^instructions\.md$
+^README\.md$
+^\.Rproj\.user$
+^.*\.Rproj$
+^\.DS_Store$
+^\.claude$
