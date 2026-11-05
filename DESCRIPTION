@@ -1,0 +1,23 @@
+Package: tenniscareer
+Title: Career Matches and Age-Gap Plots from Tennis Abstract
+Version: 0.0.0.9000
+Authors@R:
+    person("Minqi (Minchee)", "Yang", , "myang49@berkeley.edu", role = c("aut", "cre"))
+Description: Downloads the career matches of a tennis player from
+    tennisabstract.com, returns a clean data frame, and draws a scatter plot of
+    the age difference between the player and the opponent against the age of
+    the player.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 8.0.0
+Depends:
+    R (>= 4.1.0)
+Imports:
+    ggplot2,
+    httr2,
+    jsonlite,
+    rlang
+Suggests:
+    testthat (>= 3.2.0)
+Config/testthat/edition: 3
