@@ -37,3 +37,45 @@ test_that("the ages of the player and the age difference are computed", {
   expect_equal(first$player_age, days_old / 365.25)
   expect_equal(first$age_diff, first$player_age - first$opponent_age)
 })
+
+nadal_dob <- as.Date("1986-06-03")
+
+clean_male_mock <- function(js = read_fixture("MalePlayerCareer.js")) {
+  clean_career_matches(js, nadal_dob, "Rafael Nadal")
+}
+
+test_that("the age of a male opponent is taken from the file", {
+  matches <- clean_male_mock()
+  expect_equal(nrow(matches), 3)
+  expect_equal(matches$opponent_age[1], 22.264202601)
+  expect_equal(matches$opponent_age[3], 18.7597535934)
+  expect_equal(matches$result, c("loss", "loss", "win"))
+})
+
+test_that("the age of a male player is computed from his date of birth", {
+  first <- clean_male_mock()[1, ]
+  days_old <- as.numeric(as.Date("2001-09-10") - nadal_dob)
+  expect_equal(first$player_age, days_old / 365.25)
+  expect_equal(first$age_diff, first$player_age - 22.264202601)
+})
+
+test_that("a walkover is removed", {
+  js <- sub("6-4 6-4", "W/O", read_fixture("MalePlayerCareer.js"), fixed = TRUE)
+  matches <- clean_male_mock(js)
+  expect_equal(nrow(matches), 2)
+  expect_false("W/O" %in% matches$score)
+})
+
+test_that("a match without an age for the opponent is removed", {
+  js <- sub("18.7597535934", "", read_fixture("MalePlayerCareer.js"), fixed = TRUE)
+  matches <- clean_male_mock(js)
+  expect_equal(nrow(matches), 2)
+  expect_false(anyNA(matches$age_diff))
+})
+
+test_that("has_birth_dates() tells dates of birth from ages", {
+  expect_true(has_birth_dates(c("19770119", "19700503")))
+  expect_true(has_birth_dates(c("19770119", "")))
+  expect_false(has_birth_dates(c("22.264202601", "24.2902121834")))
+  expect_false(has_birth_dates(c("", "")))
+})
