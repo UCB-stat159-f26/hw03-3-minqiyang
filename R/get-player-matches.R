@@ -2,7 +2,7 @@
 #'
 #' Downloads the career matches of a player from
 #' [tennisabstract.com](https://www.tennisabstract.com) and returns them as a
-#' clean data frame, ready for `plot_age_gap()`.
+#' clean data frame, ready for [plot_age_gap()].
 #'
 #' The name can be written as `"serena williams"`, `"Serena Williams"` or
 #' `"SerenaWilliams"`. Walkovers (`W/O`) are removed, because the players did

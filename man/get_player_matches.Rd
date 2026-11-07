@@ -26,7 +26,7 @@ about the spelling of the name.
 \description{
 Downloads the career matches of a player from
 \href{https://www.tennisabstract.com}{tennisabstract.com} and returns them as a
-clean data frame, ready for \code{plot_age_gap()}.
+clean data frame, ready for \code{\link[=plot_age_gap]{plot_age_gap()}}.
 }
 \details{
 The name can be written as \code{"serena williams"}, \code{"Serena Williams"} or
