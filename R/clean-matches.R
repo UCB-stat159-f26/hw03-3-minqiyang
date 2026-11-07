@@ -54,7 +54,8 @@ opponent_age_years <- function(opponent_info, date) {
 #' @noRd
 add_ages <- function(matches, player_dob) {
   matches$player_age <- age_in_years(player_dob, matches$date)
-  matches$opponent_age <- opponent_age_years(matches$opponent_info, matches$date)
+  matches$opponent_age <-
+    opponent_age_years(matches$opponent_info, matches$date)
   matches$age_diff <- matches$player_age - matches$opponent_age
   matches
 }

@@ -39,7 +39,8 @@ check_matches <- function(matches) {
   ok <- is.data.frame(matches) && all(needed %in% names(matches)) &&
     nrow(matches) > 0
   if (!ok) {
-    stop("`matches` must be a data frame from `get_player_matches()`.", call. = FALSE)
+    stop("`matches` must be a data frame from `get_player_matches()`.",
+         call. = FALSE)
   }
   invisible(matches)
 }
@@ -61,7 +62,9 @@ age_axis <- function() {
   })
 }
 
-#' Title of the plot, e.g. "Serena Williams's Professional Matches, Age 14 to 40"
+#' Title of the plot
+#'
+#' For example "Serena Williams's Professional Matches, Age 14 to 40".
 #' @param matches Table of matches.
 #' @noRd
 age_gap_title <- function(matches) {

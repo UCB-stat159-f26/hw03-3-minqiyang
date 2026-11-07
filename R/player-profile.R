@@ -30,7 +30,8 @@ parse_player_profile <- function(page_text) {
 
 #' Download the page of a player and read the name and the date of birth
 #'
-#' @param player Player name in the Tennis Abstract format, e.g. `"SerenaWilliams"`.
+#' @param player Player name in the Tennis Abstract format, e.g.
+#'   `"SerenaWilliams"`.
 #' @return A list with the full `name` and the date of birth `dob`.
 #' @noRd
 fetch_player_profile <- function(player) {

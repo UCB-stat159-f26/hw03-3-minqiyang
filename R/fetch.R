@@ -7,13 +7,21 @@
 #' @return A list with the HTTP `status` (a number) and the `body` (text).
 #' @noRd
 http_get <- function(url) {
-  request <- httr2::req_error(httr2::request(url), is_error = function(resp) FALSE)
+  req <- httr2::req_error(httr2::request(url), is_error = \(resp) FALSE)
   response <- tryCatch(
-    httr2::req_perform(request),
-    error = function(e) stop("Could not reach ", url, ": ", conditionMessage(e), call. = FALSE)
+    httr2::req_perform(req),
+    error = function(e) stop_unreachable(url, e)
   )
   body <- httr2::resp_body_string(response, encoding = "UTF-8")
   list(status = httr2::resp_status(response), body = body)
+}
+
+#' Stop with a message when the page cannot be reached
+#' @param url Address of the page.
+#' @param error Error from the failed request.
+#' @noRd
+stop_unreachable <- function(url, error) {
+  stop("Could not reach ", url, ": ", conditionMessage(error), call. = FALSE)
 }
 
 #' Stop with a message if the HTTP status is an error
@@ -33,7 +41,8 @@ stop_if_http_error <- function(response, url) {
 #' Tennis Abstract answers with "404 Not Found" for a player that it does not
 #' know, which gives the error message about the spelling of the name.
 #'
-#' @param player Player name in the Tennis Abstract format, e.g. `"SerenaWilliams"`.
+#' @param player Player name in the Tennis Abstract format, e.g.
+#'   `"SerenaWilliams"`.
 #' @return The text of the file, as one string.
 #' @noRd
 fetch_career_js <- function(player) {
