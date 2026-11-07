@@ -1,3 +1,21 @@
+#' Make the request for a page
+#'
+#' Tennis Abstract answers with HTTP 429 (too many requests) or 503 when it
+#' gets many requests in a short time. The request is also tried again when
+#' the connection fails. It is tried up to 4 times, after a wait of 2, 4 and 8
+#' seconds, or the wait that the site asks for. An HTTP error is not an R
+#' error here, because the caller reads the status.
+#'
+#' @param url Address of the page.
+#' @return A `httr2` request.
+#' @noRd
+build_request <- function(url) {
+  req <- httr2::req_error(httr2::request(url), is_error = \(resp) FALSE)
+  httr2::req_retry(
+    req, max_tries = 4, retry_on_failure = TRUE, backoff = \(i) 2^i
+  )
+}
+
 #' Download a web page
 #'
 #' This is the only function of the package that uses the network for the
@@ -7,13 +25,21 @@
 #' @return A list with the HTTP `status` (a number) and the `body` (text).
 #' @noRd
 http_get <- function(url) {
-  req <- httr2::req_error(httr2::request(url), is_error = \(resp) FALSE)
   response <- tryCatch(
-    httr2::req_perform(req),
+    httr2::req_perform(build_request(url)),
     error = function(e) stop_unreachable(url, e)
   )
-  body <- httr2::resp_body_string(response, encoding = "UTF-8")
-  list(status = httr2::resp_status(response), body = body)
+  list(status = httr2::resp_status(response), body = response_text(response))
+}
+
+#' Text of the body of a response, or an empty string if it has no body
+#' @param response A `httr2` response.
+#' @noRd
+response_text <- function(response) {
+  if (!httr2::resp_has_body(response)) {
+    return("")
+  }
+  httr2::resp_body_string(response, encoding = "UTF-8")
 }
 
 #' Stop with a message when the page cannot be reached
