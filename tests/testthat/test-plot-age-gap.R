@@ -1,6 +1,8 @@
 mock_matches <- function() {
   clean_career_matches(
-    read_fixture("FemalePlayerCareer.js"), as.Date("1981-09-26"), "Serena Williams"
+    read_fixture("FemalePlayerCareer.js"),
+    as.Date("1981-09-26"),
+    "Serena Williams"
   )
 }
 
@@ -48,5 +50,6 @@ test_that("a table that is not from get_player_matches() gives an error", {
   msg <- "must be a data frame from `get_player_matches()`"
   expect_error(plot_age_gap("Serena Williams"), msg, fixed = TRUE)
   expect_error(plot_age_gap(mock_matches()[0, ]), msg, fixed = TRUE)
-  expect_error(plot_age_gap(mock_matches()[, c("player", "result")]), msg, fixed = TRUE)
+  two_columns <- mock_matches()[, c("player", "result")]
+  expect_error(plot_age_gap(two_columns), msg, fixed = TRUE)
 })

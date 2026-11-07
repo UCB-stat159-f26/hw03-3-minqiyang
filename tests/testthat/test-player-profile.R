@@ -20,7 +20,7 @@ test_that("parse_player_profile() gives the full name and the date of birth", {
   expect_equal(profile$dob, as.Date("1981-09-26"))
 })
 
-test_that("parse_player_profile() gives a clear error for a page without data", {
+test_that("parse_player_profile() gives an error for a page without data", {
   expect_error(
     parse_player_profile("<html>Not a player page</html>"),
     "Could not read the name and the date of birth"

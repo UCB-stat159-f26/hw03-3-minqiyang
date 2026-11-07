@@ -6,7 +6,7 @@ clean_female_mock <- function() {
   )
 }
 
-test_that("a female career gives one row for each match with the right columns", {
+test_that("a female career has one row per match and the right columns", {
   matches <- clean_female_mock()
   expect_s3_class(matches, "data.frame")
   expect_equal(nrow(matches), 3)
@@ -67,7 +67,8 @@ test_that("a walkover is removed", {
 })
 
 test_that("a match without an age for the opponent is removed", {
-  js <- sub("18.7597535934", "", read_fixture("MalePlayerCareer.js"), fixed = TRUE)
+  js <- read_fixture("MalePlayerCareer.js")
+  js <- sub("18.7597535934", "", js, fixed = TRUE)
   matches <- clean_male_mock(js)
   expect_equal(nrow(matches), 2)
   expect_false(anyNA(matches$age_diff))
