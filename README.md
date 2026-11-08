@@ -44,6 +44,10 @@ get_player_matches("Gaston Sanchez")
 #> Check the spelling of the name.
 ```
 
+The plot of Serena Williams:
+
+![Scatter plot of the matches of Serena Williams. The x-axis is her age, the y-axis is her age minus the age of the opponent.](man/figures/serena-age-gap.png)
+
 `get_player_matches()` accepts the name as `"serena williams"`,
 `"Serena Williams"` or `"SerenaWilliams"`. It returns a data frame with one
 row for each match and these columns:
@@ -109,6 +113,7 @@ hw03-3-minqiyang/
 │   ├── clean-matches.R      # builds the clean data frame
 │   └── tenniscareer-package.R
 ├── man/                     # help pages, made by roxygen2
+│   └── figures/             # the example plot of this README
 └── tests/
     ├── testthat.R
     └── testthat/
