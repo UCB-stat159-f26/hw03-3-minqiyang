@@ -139,3 +139,52 @@ devtools::test()
 - Some career files stop early. The file of Rafael Nadal ends in 2016.
 - Tennis Abstract slows down fast repeated requests. The package waits and
   tries again, up to 4 times in total, so a call can take a few seconds.
+
+## Personal reflections
+
+### What passing tests actually prove
+
+Only one function in the package touches the network: `http_get()`. My 110
+tests replace it with `testthat::local_mocked_bindings()` and
+`httr2::local_mocked_responses()`, so they read local files and run in
+seconds. Still, green tests only prove that my code works on an old snapshot
+of the site. If a column moves, the package breaks while all 110 tests pass.
+Real runs showed what offline tests miss: Carlos Alcaraz returns a 404, fast
+requests trigger HTTP 429, one download timed out, and Nadal's file stops at
+2016.
+
+Matching all 1016 rows of my HW2 `serena.csv` within 1e-13 also only proved
+that my code agreed with itself from a few weeks ago. Offline tests are still
+the right call, since live tests are slow, flaky, and rude to servers. I just
+have to remember that they check whether my code changed, not whether the
+website did.
+
+### How small commits changed the way I code
+
+I made more than 30 bottom-up commits, each doing one small thing like
+"Add age_in_years() helper". Writing a one-sentence commit message worked as
+a free design check: when I could not explain the download step in one
+sentence, I split it into four.
+
+This paired well with the 20-line function limit and made bugs easy to find,
+like when a mock Nadal page used `sub()` instead of `gsub()` and kept
+Serena's name. Splitting a function and its test sometimes felt a bit forced,
+and some commits were just a few lines, but the readable git log was worth
+it.
+
+### Hidden decisions behind a single point
+
+One point on the plot hides many small choices. Match dates are really
+tournament dates, ages divide days by 365.25 to match HW2, and the player's
+birth date comes from a separate HTML page. Women's files have 8-digit birth
+dates in column 17, while men's files give pre-calculated decimal ages. I
+checked one of them: 22.264202601 times 365.25 is exactly 8132 days, which
+suggests the site uses 365.25 too. I also dropped missing opponent ages and
+22 walkovers, cutting Serena's rows from 1038 to 1016.
+
+These choices are invisible on the plot. For small age gaps, the noise from
+these choices is as big as the signal, so the overall trend is reliable even
+if single points are not. Moving from HW2 to HW3 did not change these
+choices, but putting them into tiny tested helpers like `age_in_years()`,
+`has_birth_dates()`, and `opponent_age_years()` finally gave each decision a
+name.
